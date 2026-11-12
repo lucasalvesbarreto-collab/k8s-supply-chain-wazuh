@@ -56,3 +56,13 @@
   confirmar o resultado do passo anterior.
 - Diagnostico: ls -la e git ls-files mostraram so o .gitkeep na fase-1.
 - Licao: confirmar a saida de cada etapa antes de construir a seguinte.
+
+### 9. Actions fixadas por hash de commit
+- Motivo: tags (@v4) podem ser movidas pelo autor da action; o hash de
+  commit nao. Risco real de cadeia de suprimento.
+- Metodo: hash obtido com `git ls-remote` na tag (com ^{} para tags
+  anotadas), gravado por script, com comentario `# vN`.
+- Captura de tela cortada na borda esquerda truncou os hashes; por isso o
+  script substitui a copia manual.
+- Majors mais novos existem; foram mantidos os que ja passaram, e o
+  Dependabot propoe as atualizacoes em PRs separados.
