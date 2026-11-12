@@ -19,7 +19,7 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y yamllint libxml2-utils
 
       - name: Validar YAML
-        run: yamllint -d "{extends: relaxed, rules: {line-length: disable}}" .
+        run: yamllint .
 
       - name: Validar XML das regras do Wazuh
         run: |

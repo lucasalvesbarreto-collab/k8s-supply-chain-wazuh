@@ -39,3 +39,12 @@
   touch, que falhou. O Git não registra pastas vazias.
 - Correção: listar os quatro caminhos por extenso.
 - Lição: curinga serve para encontrar, não para criar.
+
+### 7. Workflow invalido: dois-pontos dentro do run
+- Sintoma: "Invalid workflow file ... error in your yaml syntax on line 22".
+- Causa: `run: yamllint -d "{extends: relaxed, ...}"` contem `: ` no meio do
+  texto; o YAML interpreta isso como chave/valor e quebra a linha.
+- Correcao: configuracao movida para o arquivo .yamllint, e o run ficou
+  `yamllint .`, sem dois-pontos.
+- Licao: validar o workflow localmente antes do push (yamllint no proprio
+  arquivo) teria pego o erro.

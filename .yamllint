@@ -1,0 +1,5 @@
+# Parte do perfil "relaxed" e desliga o limite de largura de linha,
+# porque comandos longos em workflows são normais.
+extends: relaxed
+rules:
+  line-length: disable
