@@ -97,3 +97,13 @@
   foi escaneado.
 - Decisao: adicionar scan da IMAGEM (le o /etc/os-release da propria
   imagem) e manter o SBOM como evidencia de inventario.
+
+### 15. Scan da imagem cobre o Debian e acha mais que o scan do SBOM
+- Scan da imagem: "Detected OS family=debian version=13.7", pkg_num=87
+  (igual aos 87 pkg:deb do SBOM).
+- Resultado no mesmo build: debian = 2 vulnerabilidades, Python = 5
+  (HIGH/CRITICAL com correcao disponivel).
+- Scan do SBOM no mesmo build: apenas Python, com 0.
+- Conclusao: o scan do SBOM sozinho subestima o risco; o scan da imagem
+  passa a ser o que decide o bloqueio. O SBOM continua como inventario.
+- Pendente: identificar os 7 CVEs e a origem dos 5 do alvo Python.
