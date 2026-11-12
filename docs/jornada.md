@@ -90,3 +90,10 @@
 - Teste positivo: requests==2.19.0 em branch separada elevou o resultado
   de 0 para 7 vulnerabilidades, provando que o scan Python detecta falhas.
 - Proximo passo: escanear o Debian (scan-type image) e medir a diferenca.
+
+### 14. Causa confirmada: Trivy nao identifica o SO pelo SBOM
+- Log: "Detected OS family=none" e "Unsupported os family=none".
+- Efeito: os 87 pacotes deb do SBOM foram ignorados; so o alvo Python
+  foi escaneado.
+- Decisao: adicionar scan da IMAGEM (le o /etc/os-release da propria
+  imagem) e manter o SBOM como evidencia de inventario.
