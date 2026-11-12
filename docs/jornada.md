@@ -80,3 +80,13 @@
 - Sintoma: tail mostrou versoes antigas (v0.9.2) como se fossem as novas.
 - Causa: ls-remote ordena alfabeticamente (v0.10 antes de v0.4).
 - Correcao: --sort=-v:refname ordena por versao.
+
+### 13. Scan do SBOM so enxerga o alvo Python
+- Sintoma: Trivy (scan-type sbom) mostrou apenas "Python / python-pkg: 0",
+  embora o SBOM tenha 87 pacotes pkg:deb, 9 pkg:pypi, 1 pkg:oci.
+- Conclusao parcial: o "0" vale para bibliotecas Python; o sistema
+  operacional (Debian) NAO foi escaneado (legenda: '-' = Not scanned).
+- Causa: ainda nao confirmada.
+- Teste positivo: requests==2.19.0 em branch separada elevou o resultado
+  de 0 para 7 vulnerabilidades, provando que o scan Python detecta falhas.
+- Proximo passo: escanear o Debian (scan-type image) e medir a diferenca.
