@@ -15,3 +15,7 @@ cosign.key
 # Temporários
 *.log
 *.swp
+
+# Ambientes virtuais Python
+.venv/
+__pycache__/
