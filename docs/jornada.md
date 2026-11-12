@@ -48,3 +48,11 @@
   `yamllint .`, sem dois-pontos.
 - Licao: validar o workflow localmente antes do push (yamllint no proprio
   arquivo) teria pego o erro.
+
+### 8. Build falhou: pasta da aplicacao inexistente
+- Sintoma: "unable to prepare context: path ./fase-1-supply-chain/app not found".
+- Causa: os arquivos da aplicacao (app.py, Dockerfile, requirements.txt)
+  nunca foram criados no repositorio; o workflow foi escrito antes de
+  confirmar o resultado do passo anterior.
+- Diagnostico: ls -la e git ls-files mostraram so o .gitkeep na fase-1.
+- Licao: confirmar a saida de cada etapa antes de construir a seguinte.
