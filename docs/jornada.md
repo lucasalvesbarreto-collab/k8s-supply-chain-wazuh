@@ -66,3 +66,17 @@
   script substitui a copia manual.
 - Majors mais novos existem; foram mantidos os que ja passaram, e o
   Dependabot propoe as atualizacoes em PRs separados.
+
+### 10. Ataque real a uma action: trivy-action
+- A pagina de release do aquasecurity/trivy-action informa um ataque de
+  cadeia de suprimento; as tags foram migradas para o prefixo "v".
+- A release v0.35.0 e declarada duplicata nao comprometida e imutavel.
+- Decisao: fixar v0.35.0 por hash (57a97c7...), conferido contra a pagina
+  da release. A v0.36.0 existe, mas nao foi avaliada; fica para PR do
+  Dependabot com revisao.
+- Licao: e o ataque que o hash fixo previne; tag movel seria risco real.
+
+### 11. Ordenacao de tags no git ls-remote
+- Sintoma: tail mostrou versoes antigas (v0.9.2) como se fossem as novas.
+- Causa: ls-remote ordena alfabeticamente (v0.10 antes de v0.4).
+- Correcao: --sort=-v:refname ordena por versao.

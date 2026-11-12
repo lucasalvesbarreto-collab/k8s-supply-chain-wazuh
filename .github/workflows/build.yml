@@ -8,14 +8,12 @@ on:
       - ".github/workflows/build.yml"
   workflow_dispatch:
 
-# Menor privilégio por padrão: nenhum job recebe nada além de leitura
 permissions:
   contents: read
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    # Permissões do job: só o que o build precisa
     permissions:
       contents: read
       packages: write
@@ -49,6 +47,44 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+
+      - name: Gerar SBOM (Syft)
+        uses: anchore/sbom-action@66cbf4bc1f1c0d2edc94016e65bc221b6bb0ad6c  # v0.24.3
+        with:
+          image: ghcr.io/${{ github.repository }}/app@${{ steps.build.outputs.digest }}
+          format: spdx-json
+          output-file: sbom.spdx.json
+          upload-artifact: false
+
+      - name: Scan do SBOM (Trivy) - tabela no log
+        uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1  # v0.35.0
+        with:
+          scan-type: sbom
+          scan-ref: sbom.spdx.json
+          format: table
+          severity: HIGH,CRITICAL
+          ignore-unfixed: true
+          exit-code: "0"
+
+      - name: Scan do SBOM (Trivy) - relatorio JSON
+        uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1  # v0.35.0
+        with:
+          scan-type: sbom
+          scan-ref: sbom.spdx.json
+          format: json
+          output: trivy-report.json
+          severity: HIGH,CRITICAL
+          ignore-unfixed: true
+          exit-code: "0"
+
+      - name: Guardar SBOM e relatorio
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9  # v7.0.2
+        with:
+          name: evidencias-supply-chain
+          path: |
+            sbom.spdx.json
+            trivy-report.json
 
       - name: Resumo com o digest
         env:
