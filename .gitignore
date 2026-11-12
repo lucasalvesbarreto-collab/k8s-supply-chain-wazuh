@@ -1,0 +1,17 @@
+# Credenciais do cluster (chave de administrador)
+kubeconfig*
+*.kubeconfig
+.kube/
+k3s.yaml
+
+# Chaves privadas (a cosign.pub, que é pública, PODE ir para o Git)
+cosign.key
+*.key
+
+# Segredos e variáveis de ambiente
+.env
+*.secret
+
+# Temporários
+*.log
+*.swp

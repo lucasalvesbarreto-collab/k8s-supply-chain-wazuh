@@ -1,0 +1,30 @@
+name: Validar
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# Menor privilégio: este workflow só precisa LER o repositório
+permissions:
+  contents: read
+
+jobs:
+  validar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Instalar yamllint e xmllint
+        run: sudo apt-get update && sudo apt-get install -y yamllint libxml2-utils
+
+      - name: Validar YAML
+        run: yamllint -d "{extends: relaxed, rules: {line-length: disable}}" .
+
+      - name: Validar XML das regras do Wazuh
+        run: |
+          shopt -s globstar nullglob
+          for f in **/*.xml; do
+            echo "Validando $f"
+            (echo "<root>"; cat "$f"; echo "</root>") | xmllint --noout -
+          done
