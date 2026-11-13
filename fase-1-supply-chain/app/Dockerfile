@@ -1,5 +1,5 @@
 # ---------- Estágio 1: instala dependências ----------
-FROM python:3.13-slim AS build
+FROM python:3.15-slim AS build
 WORKDIR /build
 COPY requirements.txt .
 # --prefix=/install isola os pacotes instalados em uma pasta,
@@ -7,7 +7,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir --prefix=/install -r requirements.txt
 
 # ---------- Estágio 2: imagem final, enxuta ----------
-FROM python:3.13-slim
+FROM python:3.15-slim
 # UID numérico fixo: o Kyverno (runAsNonRoot) consegue verificar um número,
 # mas não consegue verificar um nome de usuário.
 RUN useradd --uid 10001 --no-create-home --shell /usr/sbin/nologin app
