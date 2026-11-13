@@ -119,3 +119,12 @@
   de pip/_vendor/vendor.txt, ainda a confirmar.
 - Licao: o pip list nao enxerga bibliotecas embutidas; o scan da imagem
   enxerga.
+
+### 17. Achados do Python vem do vendor.txt do pip
+- vendor.txt do pip 26.2.2 lista msgpack==1.1.2, setuptools==70.3.0 e
+  urllib3==2.7.0: exatamente as 3 bibliotecas com os 5 CVEs.
+- Origem: copias embutidas no proprio pip, nao no codigo da aplicacao.
+- zlib1g: o rebuild nao trouxe correcao; a base ainda tem a versao
+  vulneravel (debian 13.7).
+- Decisao: remover o pip da imagem final (RUN pip uninstall -y pip), pois
+  a aplicacao nao o usa em execucao. Efeito esperado: Python = 0.

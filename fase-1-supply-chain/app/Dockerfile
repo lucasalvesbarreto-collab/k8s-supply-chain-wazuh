@@ -11,6 +11,9 @@ FROM python:3.13-slim
 # UID numérico fixo: o Kyverno (runAsNonRoot) consegue verificar um número,
 # mas não consegue verificar um nome de usuário.
 RUN useradd --uid 10001 --no-create-home --shell /usr/sbin/nologin app
+# Remove o pip da imagem final: a aplicacao nao o usa em execucao, e as
+# bibliotecas embutidas nele (msgpack, urllib3, setuptools) geravam 5 CVEs.
+RUN pip uninstall -y pip
 COPY --from=build /install /usr/local
 WORKDIR /app
 COPY app.py .
