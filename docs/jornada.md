@@ -128,3 +128,14 @@
   vulneravel (debian 13.7).
 - Decisao: remover o pip da imagem final (RUN pip uninstall -y pip), pois
   a aplicacao nao o usa em execucao. Efeito esperado: Python = 0.
+
+### 18. Scan da imagem passa a bloquear, com excecao temporaria
+- Politica: Trivy (scan da imagem) com exit-code 1 para HIGH/CRITICAL com
+  correcao; excecao do zlib1g em .trivyignore com vencimento 2026-12-13.
+- Teste negativo: excecao com data vencida (2026-11-01) deixou o build
+  vermelho; o scan bloqueia e a excecao vencida nao esconde falha.
+- Teste positivo: mesma excecao com data valida deixou o build verde
+  (Debian: 0, suprimido; nao corrigido).
+- Registro: docs/riscos-aceitos.md (motivo, vencimento, condicao de saida).
+- Limite assumido: nao foi analisado se a aplicacao usa as funcoes
+  afetadas do zlib; a decisao e de aguardar a base, nao de negar o risco.
