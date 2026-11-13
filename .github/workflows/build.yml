@@ -94,7 +94,8 @@ jobs:
           echo "=== pip list ==="
           docker run --rm --entrypoint pip "$IMAGE" list
           echo "=== pastas de metadados Python ==="
-          docker run --rm --entrypoint sh "$IMAGE" -c 'find /usr/local/lib \( -name "*.dist-info" -o -name "*.egg-info" \)'
+          echo "=== onde estao msgpack, setuptools e urllib3 ==="
+          docker run --rm --entrypoint sh "$IMAGE" -c 'find / -xdev \( -iname "*msgpack*" -o -iname "*setuptools*" -o -iname "*urllib3*" \) -not -path "/proc/*" 2>/dev/null | head -n 40'          docker run --rm --entrypoint sh "$IMAGE" -c 'find /usr/local/lib \( -name "*.dist-info" -o -name "*.egg-info" \)'
 
 
       - name: Guardar SBOM e relatorio
