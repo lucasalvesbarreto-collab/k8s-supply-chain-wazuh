@@ -86,6 +86,17 @@ jobs:
           ignore-unfixed: true
           exit-code: "0"
 
+
+      - name: Diagnostico - onde estao os pacotes Python da imagem
+        env:
+          IMAGE: ghcr.io/${{ github.repository }}/app@${{ steps.build.outputs.digest }}
+        run: |
+          echo "=== pip list ==="
+          docker run --rm --entrypoint pip "$IMAGE" list
+          echo "=== pastas de metadados Python ==="
+          docker run --rm --entrypoint sh "$IMAGE" -c 'find /usr/local/lib \( -name "*.dist-info" -o -name "*.egg-info" \)'
+
+
       - name: Guardar SBOM e relatorio
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9  # v7.0.2
