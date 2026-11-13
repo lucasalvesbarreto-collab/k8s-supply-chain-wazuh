@@ -96,7 +96,8 @@ jobs:
           echo "=== pastas de metadados Python ==="
           echo "=== onde estao msgpack, setuptools e urllib3 ==="
           docker run --rm --entrypoint sh "$IMAGE" -c 'find / -xdev \( -iname "*msgpack*" -o -iname "*setuptools*" -o -iname "*urllib3*" \) -not -path "/proc/*" 2>/dev/null | head -n 40'          docker run --rm --entrypoint sh "$IMAGE" -c 'find /usr/local/lib \( -name "*.dist-info" -o -name "*.egg-info" \)'
-
+          echo "=== vendor.txt do pip ==="
+          docker run --rm --entrypoint sh "$IMAGE" -c 'cat /usr/local/lib/python3.13/site-packages/pip/_vendor/vendor.txt'
 
       - name: Guardar SBOM e relatorio
         if: always()

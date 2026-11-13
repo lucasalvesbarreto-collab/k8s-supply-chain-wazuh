@@ -107,3 +107,15 @@
 - Conclusao: o scan do SBOM sozinho subestima o risco; o scan da imagem
   passa a ser o que decide o bloqueio. O SBOM continua como inventario.
 - Pendente: identificar os 7 CVEs e a origem dos 5 do alvo Python.
+
+### 16. Origem dos achados do scan da imagem
+- Debian: 2 CVEs HIGH em zlib1g (heap buffer overflow). Correcao existe no
+  Debian (1:1.3.dfsg+really1.3.1-1+deb13u1). Decisao: nao alterar o
+  Dockerfile; reconstruir a imagem e esperar a base atualizada.
+- Python: msgpack e urllib3 NAO estao instalados (pip list limpo); estao
+  em pip/_vendor (copias embutidas no proprio pip). Nao pertencem ao
+  codigo da aplicacao.
+- setuptools 70.3.0: sem pasta encontrada por nome; hipotese de que vem
+  de pip/_vendor/vendor.txt, ainda a confirmar.
+- Licao: o pip list nao enxerga bibliotecas embutidas; o scan da imagem
+  enxerga.
