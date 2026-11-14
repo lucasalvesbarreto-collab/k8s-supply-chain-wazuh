@@ -14,6 +14,8 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    outputs:
+      digest: ${{ steps.build.outputs.digest }}
     permissions:
       contents: read
       packages: write
@@ -104,3 +106,36 @@ jobs:
           echo "### Imagem publicada" >> "$GITHUB_STEP_SUMMARY"
           echo "Tag: $TAGS" >> "$GITHUB_STEP_SUMMARY"
           echo "Digest: $DIGEST" >> "$GITHUB_STEP_SUMMARY"
+
+  assinar:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+    env:
+      IMAGE: ghcr.io/${{ github.repository }}/app
+      DIGEST: ${{ needs.build.outputs.digest }}
+      IDENTITY: https://github.com/${{ github.repository }}/.github/workflows/build.yml@${{ github.ref }}
+    steps:
+      - name: Login no GHCR
+        uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9  # v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Instalar o Cosign
+        uses: sigstore/cosign-installer@756fe2d284c7292c4e9b62c8a28f1e5629c59532  # v4.1.3
+        with:
+          cosign-release: "v3.1.4"
+
+      - name: Assinar a imagem pelo digest (keyless)
+        run: cosign sign --yes "${IMAGE}@${DIGEST}"
+
+      - name: Verificar a assinatura
+        run: |
+          cosign verify "${IMAGE}@${DIGEST}" \
+            --certificate-identity "$IDENTITY" \
+            --certificate-oidc-issuer "https://token.actions.githubusercontent.com"
