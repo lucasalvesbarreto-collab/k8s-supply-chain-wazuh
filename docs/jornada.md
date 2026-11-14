@@ -149,3 +149,14 @@
 - Verificacao no proprio job com certificate-identity (workflow +
   referencia da branch) e certificate-oidc-issuer do GitHub: verde.
 - Testado primeiro em branch (feat/assinatura) antes de ir para a main.
+
+### 20. Verificacao externa da assinatura (VM)
+- cosign v3.1.4 baixado na VM, com sha256 conferido (cosign-linux-amd64: OK).
+  Limite: a soma vem do mesmo local do binario; detecta corrupcao, nao uma
+  release comprometida.
+- Teste 1 (main + identidade da main): sucesso, saida 0.
+- Teste 2 (identidade errada): falha, saida 1.
+- Teste 3 (imagem da branch feat/assinatura + identidade da main): falha,
+  saida 1. O erro mostra SAN esperado vs. obtido: a assinatura fica presa
+  a branch de origem.
+- Pendente: confirmar se o Kyverno le o formato de assinatura do Cosign 3.
