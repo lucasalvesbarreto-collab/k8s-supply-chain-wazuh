@@ -139,3 +139,13 @@
 - Registro: docs/riscos-aceitos.md (motivo, vencimento, condicao de saida).
 - Limite assumido: nao foi analisado se a aplicacao usa as funcoes
   afetadas do zlib; a decisao e de aguardar a base, nao de negar o risco.
+
+### 19. Assinatura keyless com Cosign em job separado
+- Job "assinar" (needs: build): so roda se o build e o scan bloqueante
+  passarem; unico job com id-token: write (menor privilegio).
+- Assinatura pelo digest, nao pela tag. Cosign fixado em v3.1.4 (acima de
+  3.0.6, que corrige avisos conhecidos); cosign-installer v4.1.3 por hash,
+  pois a v3.x do instalador nao instala o Cosign 3.
+- Verificacao no proprio job com certificate-identity (workflow +
+  referencia da branch) e certificate-oidc-issuer do GitHub: verde.
+- Testado primeiro em branch (feat/assinatura) antes de ir para a main.
