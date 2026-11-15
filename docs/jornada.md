@@ -160,3 +160,14 @@
   saida 1. O erro mostra SAN esperado vs. obtido: a assinatura fica presa
   a branch de origem.
 - Pendente: confirmar se o Kyverno le o formato de assinatura do Cosign 3.
+
+### 21. Proveniencia SLSA com attest-build-provenance
+- Passo no job "assinar" (unico com id-token: write e attestations: write).
+  Action v4.2.2 fixada por hash; internamente chama actions/attest, tambem
+  fixada por hash pelo autor (fora do nosso controle).
+- Atestacao do tipo Build Provenance, assinada com certificado do Sigstore
+  Public Good, registrada no Rekor e guardada no repositorio e no GHCR.
+- Nivel afirmado: SLSA v1.0 Build Level 2 (so a atestacao). Level 3 exigiria
+  workflow reutilizavel; nao e afirmado.
+- Verificacao externa na VM com cosign verify-attestation (resultado a
+  registrar).
