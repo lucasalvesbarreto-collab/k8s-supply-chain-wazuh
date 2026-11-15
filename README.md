@@ -22,3 +22,37 @@ Detalhes dos problemas reais e das decisões: [docs/jornada.md](docs/jornada.md)
 O que este projeto **não** garante: [docs/limitacoes.md](docs/limitacoes.md).
 
 ## Fluxo do pipeline
+
+~~text
+push na main
+  -> build da imagem (Buildx) e publicação no GHCR
+  -> SBOM SPDX (Syft)
+  -> scan da imagem (Trivy) -- falha o build se houver CVE sem exceção válida
+  -> assinatura keyless (Cosign) por digest
+  -> proveniência SLSA (attest-build-provenance)
+~~
+
+## Fases
+
+| Fase | Tema | Estado |
+|------|------|--------|
+| 0 | Ambiente (k3s, VM) | Concluída |
+| 1 | Pipeline: SBOM, scan bloqueante, assinatura, proveniência | Concluída |
+| 2 | Admissão com Kyverno | Pendente |
+| 3 | IaC com Checkov / Trivy config | Pendente |
+| 4 | Falco + Wazuh (regras 1002xx) e playbook N1 | Pendente |
+
+## Ambiente
+
+- k3s em nó único (traefik e servicelb desativados)
+- VM Ubuntu com 4 vCPU e 7,2 GiB de RAM (Wazuh ocupa cerca de 2,7 GiB)
+
+## Projeto anterior
+
+Este projeto continua o laboratório [wazuh-mitre-attack-lab](https://github.com/lucasalvesbarreto-collab/wazuh-mitre-attack-lab), de detecção mapeada ao MITRE ATT&CK.
+
+## Evidências
+
+![SBOM gerado pelo Syft](docs/evidencias/sbom.png)
+
+![Scan do SBOM](docs/evidencias/scan-sbom.png)
