@@ -171,3 +171,19 @@
   workflow reutilizavel; nao e afirmado.
 - Verificacao externa na VM com cosign verify-attestation (resultado a
   registrar).
+
+### 21. Proveniencia SLSA com attest-build-provenance
+- Passo no job "assinar" (unico com id-token: write e attestations: write).
+  Action v4.2.2 fixada por hash; internamente chama actions/attest, tambem
+  fixada por hash pelo autor (fora do nosso controle).
+- Atestacao do tipo Build Provenance, assinada com certificado do Sigstore
+  Public Good, registrada no Rekor e guardada no repositorio e no GHCR.
+- Verificacao externa (VM) com cosign verify-attestation: sucesso, saida 0.
+  Conteudo: imagem (digest), workflow build.yml, ref da branch e commit
+  exato; o gitCommit bate com o commit enviado pelo git push.
+- Teste negativo (identidade da main contra imagem da branch): falha,
+  saida 1, mostrando SAN esperado vs. obtido.
+- Nivel afirmado: SLSA v1.0 Build Level 2 (so a atestacao). Level 3 exigiria
+  workflow reutilizavel; nao e afirmado.
+- Incidente: git pull falhou por autenticacao; o credential cache expira
+  em 1 hora (timeout=3600), e o git voltou a pedir o token.
