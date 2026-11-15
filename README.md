@@ -1,39 +1,24 @@
 # k8s-supply-chain-wazuh
 
-Cadeia de suprimento de software segura em Kubernetes, com detecção em
+Cadeia de suprimento de software segura em Kubernetes (k3s), com detecção em
 runtime integrada ao Wazuh e mapeada ao MITRE ATT&CK for Containers.
 
-> Status: em andamento. Fase 0 (ambiente) concluída.
+> Status: em andamento. Fases 0 e 1 concluídas. Próxima: Fase 2 (admissão
+> com Kyverno).
 
-## Arquitetura planejada
+## O que a Fase 1 já prova
 
-Código -> GitHub Actions -> build da imagem
-  -> SBOM (Syft), scan (Trivy/Grype), assinatura (Cosign)
-  -> registry (GHCR) + proveniência SLSA
-  -> cluster k3s com Kyverno (só imagem assinada, sem root, sem tag latest),
-     NetworkPolicy default deny e Falco (runtime)
-  -> alertas no Wazuh, com regras locais 1002xx
+| Controle | Como foi provado |
+|---|---|
+| Actions fixadas por hash de commit | Todas as linhas `uses:` têm 40 caracteres hexadecimais; Dependabot propõe atualizações |
+| SBOM (SPDX) da imagem | Gerado pelo Syft a cada build; guardado como artefato |
+| Scan que bloqueia | Teste negativo (exceção vencida: build vermelho) e positivo (exceção válida: verde) |
+| Scan detecta falhas de verdade | `requests==2.19.0` em branch de teste elevou o resultado de 0 para 7 |
+| Assinatura sem chave (Cosign keyless) | Verificada de fora do pipeline, na VM, com identidade do workflow |
+| Assinatura presa à branch de origem | Imagem da branch de teste foi recusada ao exigir a identidade da `main` |
+| Proveniência SLSA (Build Level 2) | `cosign verify-attestation` mostra imagem, workflow, referência e commit exato |
 
-## Fases
+Detalhes dos problemas reais e das decisões: [docs/jornada.md](docs/jornada.md).
+O que este projeto **não** garante: [docs/limitacoes.md](docs/limitacoes.md).
 
-| Fase | Tema | Status |
-|---|---|---|
-| 0 | Ambiente: k3s ao lado do Wazuh | Concluída |
-| 1 | Pipeline com SBOM, assinatura e proveniência | Pendente |
-| 2 | Admissão com Kyverno (teste positivo e negativo) | Pendente |
-| 3 | IaC segura (Checkov/Trivy config no CI) | Pendente |
-| 4 | Runtime: Falco + Wazuh, regras e playbook N1 | Pendente |
-
-## Ambiente
-
-- VM Ubuntu Server com 4 vCPUs e 7,2 GiB de RAM, rodando Wazuh (manager,
-  indexer, dashboard) e k3s na mesma máquina.
-- Tudo local e com ferramentas de código aberto, sem custo.
-
-## Projeto anterior
-
-Detecção mapeada ao ATT&CK: [wazuh-mitre-attack-lab](https://github.com/lucasalvesbarreto-collab/wazuh-mitre-attack-lab)
-
-## Documentação
-
-- [Jornada e problemas reais](docs/jornada.md)
+## Fluxo do pipeline
