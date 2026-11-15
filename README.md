@@ -23,14 +23,14 @@ O que este projeto **não** garante: [docs/limitacoes.md](docs/limitacoes.md).
 
 ## Fluxo do pipeline
 
-~~text
+~~~text
 push na main
   -> build da imagem (Buildx) e publicação no GHCR
   -> SBOM SPDX (Syft)
   -> scan da imagem (Trivy) -- falha o build se houver CVE sem exceção válida
   -> assinatura keyless (Cosign) por digest
   -> proveniência SLSA (attest-build-provenance)
-~~
+~~~
 
 ## Fases
 
