@@ -34,7 +34,7 @@
 
 ## Imagem de referência
 
-- Digest verificado (build de 14/11/2026, commit ``): `sha256:f5c3c2fae6c9e9e644c667c56894243cf96f19c9d151434a21b668088a9fcb83`. Cada novo commit na main gera um build novo e, portanto, um digest novo.
+- Digest verificado (build de 14/11/2026, commit `b9a7fbe`): `sha256:f5c3c2fae6c9e9e644c667c56894243cf96f19c9d151434a21b668088a9fcb83`. Cada novo commit na main gera um build novo e, portanto, um digest novo.
 - Identidade esperada:
   `https://github.com/lucasalvesbarreto-collab/k8s-supply-chain-wazuh/.github/workflows/build.yml@refs/heads/main`
 - Emissor: `https://token.actions.githubusercontent.com`
